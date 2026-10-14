@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulkyBookWeb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261014113242_AddCategoryToDB")]
-    partial class AddCategoryToDB
+    [Migration("20261014115914_AddCategoryModel")]
+    partial class AddCategoryModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,17 +26,17 @@ namespace BulkyBookWeb.Migrations
 
             modelBuilder.Entity("BulkyBookWeb.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryIdentification")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryIdentification"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CategoryIdentification");
+                    b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
