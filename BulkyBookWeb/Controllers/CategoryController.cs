@@ -13,7 +13,7 @@ namespace BulkyBookWeb.Controllers
         public IActionResult Index()
         {
             var categories = _conext.Categories.ToList();
-            return View("Index");
+            return View("Index", categories);
         }
     }
 }
