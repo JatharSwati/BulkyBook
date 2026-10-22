@@ -58,17 +58,18 @@ namespace BulkyBookWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ActionName("Upadte")]
+        [ActionName("Update")]
         public IActionResult UpdatePOST(Category category)
         {
-            if (!string.IsNullOrEmpty(category.Name) && _context.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower()))
+            if (!string.IsNullOrEmpty(category.Name) && 
+                _context.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower() && c.Id!=category.Id))
             {
                 ModelState.AddModelError("", "Category name already exists!");
             }
 
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
+                _context.Categories.Update(category);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
