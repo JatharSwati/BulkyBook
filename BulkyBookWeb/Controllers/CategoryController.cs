@@ -27,9 +27,18 @@ namespace BulkyBookWeb.Controllers
         [ActionName("Create")]
         public IActionResult CreatePOST(Category category)
         {
-            _conext.Categories.Add(category);
-            _conext.SaveChanges();
-            return RedirectToAction("Index");
+            if (!string.IsNullOrEmpty(category.Name) && _conext.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower()))
+            {
+                ModelState.AddModelError("", "Category name already exists!");
+            }
+
+            if (ModelState.IsValid)
+            {              
+                _conext.Categories.Add(category);
+                _conext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
         }
     }
 }
