@@ -6,14 +6,14 @@ namespace BulkyBookWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _conext;
+        private readonly ApplicationDbContext _context;
         public CategoryController(ApplicationDbContext context)
         {
-            _conext = context;
+            _context = context;
         }
         public IActionResult Index()
         {
-            var categories = _conext.Categories.ToList();
+            var categories = _context.Categories.ToList();
             return View("Index", categories);
         }
 
@@ -27,15 +27,49 @@ namespace BulkyBookWeb.Controllers
         [ActionName("Create")]
         public IActionResult CreatePOST(Category category)
         {
-            if (!string.IsNullOrEmpty(category.Name) && _conext.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower()))
+            if (!string.IsNullOrEmpty(category.Name) && _context.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower()))
             {
                 ModelState.AddModelError("", "Category name already exists!");
             }
 
             if (ModelState.IsValid)
             {              
-                _conext.Categories.Add(category);
-                _conext.SaveChanges();
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public IActionResult Update(int? id)
+        {
+            if(id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var category = _context.Categories.Find(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Upadte")]
+        public IActionResult UpdatePOST(Category category)
+        {
+            if (!string.IsNullOrEmpty(category.Name) && _context.Categories.Any(c => c.Name.ToLower() == category.Name.ToLower()))
+            {
+                ModelState.AddModelError("", "Category name already exists!");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Categories.Add(category);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View();
